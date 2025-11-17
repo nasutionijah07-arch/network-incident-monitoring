@@ -1,17 +1,24 @@
-# Import python packages
 import streamlit as st
-from snowflake.snowpark.context import get_active_session
-
-# Get the current credentials
-session = get_active_session()
-
+import sys
+import importlib
 
 # Adjusting the page
 st.set_page_config(
-    page_title="Network Incident Prediction", 
-    page_icon="🌐", 
+    page_title="Network Incident Prediction",
+    page_icon="🌐",
     layout='wide'
 )
+
+# Reload modules in development (helps with caching issues)
+# Comment out in production for better performance
+if 'utils.data_prep' in sys.modules:
+    importlib.reload(sys.modules['utils.data_prep'])
+if 'utils.data_prep_sup' in sys.modules:
+    importlib.reload(sys.modules['utils.data_prep_sup'])
+if 'utils.batch_prediction' in sys.modules:
+    importlib.reload(sys.modules['utils.batch_prediction'])
+if 'utils.dash_sup' in sys.modules:
+    importlib.reload(sys.modules['utils.dash_sup'])
 
 def main():
     # Load external CSS
@@ -33,6 +40,7 @@ def main():
     nav_options = [
         "📈 Prediction",
         "📊 Dashboard",
+        "📡 Live Prediction",
     ]
 
     # Load CSS
@@ -56,10 +64,13 @@ def main():
     # Page display logic
     if st.session_state.current_page == "📈 Prediction":
         from app.network import network_page
-        network_page(session=session)
-    else:
+        network_page()
+    elif st.session_state.current_page == "📊 Dashboard":
         from custom_pages.dash import dashboard_page
         dashboard_page()
+    elif st.session_state.current_page == "📡 Live Prediction":
+        from custom_pages.live_prediction import live_prediction_page
+        live_prediction_page()
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,32 @@
+# Secrets
+.env
+
+# Logs & Python cache
+__pycache__/
+*.log
+*.pyc
+*.pyo
+*.pyd
+
+# Notes directory
+\! Notes
+
+# Dataset files
+dataset/DATAMART/FACT_NETWORK_REALTIME_STATUS.parquet
+dataset/RAW/RAW_ML_FEATURES.parquet
+dataset/RAW/RAW_ONT_STATUS.parquet
+
+# Demo directory
+demo
+
+# Experiment notebooks
+notebook-experiment
+
+# Streamlit Trained Models
+streamlit/trained_models
+
+# Local Streamlit
+streamlit-local
+
+# Old Streamlit
+streamlit-old

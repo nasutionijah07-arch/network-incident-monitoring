@@ -1,2 +1,22 @@
-catboost==1.2.8
-snowflake-ml-python==1.17.0
+# Core Data Science & ML Libraries
+pandas>=2.2.3
+numpy>=2.2.5
+scipy>=1.15.3
+
+# Machine Learning Models
+xgboost>=2.1.4
+catboost
+joblib==1.4.2
+
+# Snowflake Integration
+snowflake-ml-python
+
+# Visualization
+plotly>=6.0.1
+folium>=0.19.5
+streamlit_folium>=0.25.0
+
+# Utilities
+requests>=2.32.3
+pytz
+openpyxl

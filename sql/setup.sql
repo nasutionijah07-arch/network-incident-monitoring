@@ -1,28 +1,56 @@
-use role accountadmin;
-
-create or replace role snowflake_intelligence_admin;
-grant create warehouse on account to role snowflake_intelligence_admin;
-grant create database on account to role snowflake_intelligence_admin;
-grant create integration on account to role snowflake_intelligence_admin;
-
-set current_user = (select current_user());   
-grant role snowflake_intelligence_admin to user identifier($current_user);
-alter user set default_role = snowflake_intelligence_admin;
-alter user set default_warehouse = dash_wh_si;
-
-use role snowflake_intelligence_admin;
-
-use database HACKATHON;
-use schema DATAMART;
-use warehouse DASH_WH_SI;
-
 USE ROLE ACCOUNTADMIN;
-create or replace stage semantic_models encryption = (type = 'snowflake_sse') directory = ( enable = true );
 
-create or replace notification integration email_integration
-  type=email
-  enabled=true
-  default_subject = 'snowflake intelligence';
+CREATE OR REPLACE ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+GRANT CREATE WAREHOUSE ON ACCOUNT TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+GRANT CREATE DATABASE ON ACCOUNT TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+GRANT CREATE INTEGRATION ON ACCOUNT TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+
+SET CURRENT_USER = (SELECT CURRENT_USER());   
+GRANT ROLE SNOWFLAKE_INTELLIGENCE_ADMIN TO USER IDENTIFIER($CURRENT_USER);
+ALTER USER SET DEFAULT_ROLE = SNOWFLAKE_INTELLIGENCE_ADMIN;
+ALTER USER SET DEFAULT_WAREHOUSE = SI_WH;
+
+USE ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+CREATE OR REPLACE WAREHOUSE SI_WH WITH WAREHOUSE_SIZE='large';
+--------------------------------------------------
+USE ROLE ACCOUNTADMIN;
+-- Warehouse permission (required for Cortex indexing)
+GRANT USAGE, OPERATE ON WAREHOUSE SI_WH 
+  TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+
+-- Full access to the database and everything under it
+GRANT ALL PRIVILEGES ON DATABASE HACKATHON 
+  TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+
+GRANT ALL PRIVILEGES ON SCHEMA HACKATHON.DATAMART
+  TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+
+GRANT SELECT ON VIEW HACKATHON.DATAMART.FACT_EVENT_TRANSCRIPTS 
+  TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+
+-- CORTEX SEARCH SERVICE PERMISSION
+GRANT CREATE CORTEX SEARCH SERVICE 
+  ON SCHEMA HACKATHON.DATAMART
+  TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+
+SHOW GRANTS TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+--------------------------------------------------
+USE ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+
+CREATE SCHEMA IF NOT EXISTS HACKATHON.AGENTS;
+GRANT CREATE AGENT ON SCHEMA HACKATHON.AGENTS TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+
+USE DATABASE HACKATHON;
+USE SCHEMA DATAMART;
+USE WAREHOUSE SI_WH;
+USE ROLE ACCOUNTADMIN;
+
+CREATE OR REPLACE STAGE SEMANTIC_MODELS ENCRYPTION = (TYPE = 'SNOWFLAKE_SSE') DIRECTORY = ( ENABLE = TRUE );
+
+CREATE OR REPLACE NOTIFICATION INTEGRATION EMAIL_INTEGRATION
+  TYPE=EMAIL
+  ENABLED=TRUE
+  DEFAULT_SUBJECT = 'SNOWFLAKE INTELLIGENCE';
 
 create or replace procedure send_email(
     recipient_email varchar,
@@ -58,5 +86,3 @@ def send_email(session, recipient_email, subject, body):
 $$;
 
 ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'AWS_US';
-
-select 'Congratulations! Snowflake Intelligence setup has completed successfully!' as status;

@@ -1,9 +1,0 @@
-name: app_environment
-channels:
-  - snowflake
-dependencies:
-  - catboost=1.2.8
-  - python=3.11.*
-  - snowflake-ml-python=1.17.0
-  - snowflake-snowpark-python=
-  - streamlit=

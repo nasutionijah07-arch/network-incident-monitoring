@@ -1,658 +1,1507 @@
 name: Network_Analytics_Datamodel
 tables:
   - name: DIM_CITY
+    description: This table stores geographic information about cities, including a unique identifier, city name, province, and region, providing a centralized repository for location-based data.
     base_table:
       database: HACKATHON
       schema: DATAMART
       table: DIM_CITY
-    primary_key:
-      columns:
-        - CITY_KEY
     dimensions:
-      - name: CITY_KEY
-        synonyms: [city_id, city_code]
-        description: Surrogate key for city.
-        expr: CITY_KEY
-        data_type: NUMBER(38,0)
       - name: CITY
-        synonyms: [town, municipality]
+        synonyms:
+          - municipality
+          - town
         description: City name.
         expr: CITY
         data_type: VARCHAR(16777216)
+        sample_values:
+          - Kalimantan Barat
+          - Aceh
+          - Bangka Belitung
+      - name: CITY_KEY
+        synonyms:
+          - city_code
+          - city_id
+        description: Surrogate key for city.
+        expr: CITY_KEY
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '29'
+          - '1'
+          - '2'
       - name: PROVINCE
-        synonyms: [state, wilayah]
+        synonyms:
+          - state
+          - wilayah
         description: Province/state of the city.
         expr: PROVINCE
         data_type: VARCHAR(16777216)
+        sample_values:
+          - Kalimantan Barat
+          - Aceh
+          - Bangka Belitung
       - name: REGION
-        synonyms: [area, zone]
+        synonyms:
+          - area
+          - zone
         description: Business region of the city.
         expr: REGION
         data_type: VARCHAR(16777216)
-
+        sample_values:
+          - Sumatra
+          - Java
+          - Bali & Nusa Tenggara
+    primary_key:
+      columns:
+        - CITY_KEY
   - name: DIM_OLT
+    description: This table stores information about Optical Line Terminals (OLTs), which are devices used in fiber-optic networks to manage and distribute internet, TV, and phone services. Each record represents a unique OLT device, identified by a unique key (OLT_KEY) and a unique identifier (OLT_ID). The table also captures the city where the OLT is located, referenced by a foreign key (CITY_KEY) that links to a separate dimension table containing city information.
     base_table:
       database: HACKATHON
       schema: DATAMART
       table: DIM_OLT
-    primary_key:
-      columns:
-        - OLT_KEY
     dimensions:
-      - name: OLT_KEY
-        synonyms: [olt_key_id]
-        description: Surrogate key for OLT.
-        expr: OLT_KEY
-        data_type: NUMBER(38,0)
-      - name: OLT_ID
-        synonyms: [olt_identifier]
-        description: Business identifier for OLT.
-        expr: OLT_ID
-        data_type: VARCHAR(16777216)
       - name: CITY_KEY
-        synonyms: [city_fk]
+        synonyms:
+          - city_fk
         description: Foreign key to DIM_CITY.
         expr: CITY_KEY
         data_type: NUMBER(38,0)
-
+        sample_values:
+          - '29'
+          - '1'
+          - '2'
+      - name: OLT_ID
+        synonyms:
+          - olt_identifier
+        description: Business identifier for OLT.
+        expr: OLT_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - OLT-JAW42-02
+          - OLT-YOGA5-02
+          - OLT-ACE7E-01
+      - name: OLT_KEY
+        synonyms:
+          - olt_key_id
+        description: Surrogate key for OLT.
+        expr: OLT_KEY
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '29'
+          - '1'
+          - '2'
+    primary_key:
+      columns:
+        - OLT_ID
+        - OLT_KEY
   - name: DIM_CLUSTER
+    description: This table stores information about clusters, which are likely geographic or network-based groupings, with each record representing a single cluster. The table captures the unique identifier for the cluster (CLUSTER_KEY), the cluster's ID and name, as well as foreign keys referencing the OLT (Optical Line Terminal) and city to which the cluster belongs.
     base_table:
       database: HACKATHON
       schema: DATAMART
       table: DIM_CLUSTER
-    primary_key:
-      columns:
-        - CLUSTER_KEY
     dimensions:
-      - name: CLUSTER_KEY
-        synonyms: [cluster_surrogate_key]
-        description: Surrogate key for cluster.
-        expr: CLUSTER_KEY
-        data_type: NUMBER(38,0)
-      - name: CLUSTER_ID
-        synonyms: [cluster_code]
-        description: Business identifier for cluster.
-        expr: CLUSTER_ID
-        data_type: VARCHAR(16777216)
-      - name: CLUSTER_NAME
-        synonyms: [cluster_label]
-        description: Human-friendly cluster name.
-        expr: CLUSTER_NAME
-        data_type: VARCHAR(16777216)
-      - name: OLT_KEY
-        synonyms: [olt_fk]
-        description: Foreign key to DIM_OLT.
-        expr: OLT_KEY
-        data_type: NUMBER(38,0)
       - name: CITY_KEY
-        synonyms: [city_fk]
+        synonyms:
+          - city_fk
         description: Foreign key to DIM_CITY.
         expr: CITY_KEY
         data_type: NUMBER(38,0)
-
+        sample_values:
+          - '29'
+          - '1'
+          - '2'
+      - name: CLUSTER_ID
+        synonyms:
+          - cluster_code
+        description: Business identifier for cluster.
+        expr: CLUSTER_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - ACE7E-CL12
+          - YOGA5-CL11
+          - JAK33-CL23
+      - name: CLUSTER_KEY
+        synonyms:
+          - cluster_surrogate_key
+        description: Surrogate key for cluster.
+        expr: CLUSTER_KEY
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '98'
+          - '29'
+          - '1'
+      - name: CLUSTER_NAME
+        synonyms:
+          - cluster_label
+        description: Human-friendly cluster name.
+        expr: CLUSTER_NAME
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Cluster-JAK33-13
+          - Cluster-ACE7E-13
+          - Cluster-SUMC0-22
+      - name: OLT_KEY
+        synonyms:
+          - olt_fk
+        description: Foreign key to DIM_OLT.
+        expr: OLT_KEY
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '29'
+          - '1'
+          - '2'
+    primary_key:
+      columns:
+        - CLUSTER_ID
+        - CLUSTER_KEY
   - name: FACT_NETWORK_CONTEXT_STATIC
+    description: This table stores static information about network context, including geographical location (city, province, region), network equipment details (OLT ID, FDT name, FAT name), and cluster information (cluster ID, cluster key, cluster name), as well as vendor and firmware version details.
     base_table:
       database: HACKATHON
       schema: DATAMART
       table: FACT_NETWORK_CONTEXT_STATIC
     dimensions:
       - name: CITY
+        description: Province or region where the network is located.
         expr: CITY
         data_type: VARCHAR(16777216)
+        sample_values:
+          - Kalimantan Barat
+          - Aceh
+          - Bangka Belitung
       - name: CITY_KEY
+        description: Unique identifier for a city in the network.
         expr: CITY_KEY
         data_type: NUMBER(38,0)
-      - name: PROVINCE
-        expr: PROVINCE
-        data_type: VARCHAR(16777216)
-      - name: REGION
-        expr: REGION
-        data_type: VARCHAR(16777216)
-      - name: OLT_ID
-        expr: OLT_ID
-        data_type: VARCHAR(16777216)
-      - name: OLT_KEY
-        expr: OLT_KEY
-        data_type: NUMBER(38,0)
-      - name: FDT_NAME
-        expr: FDT_NAME
-        data_type: VARCHAR(16777216)
-      - name: FAT_NAME
-        expr: FAT_NAME
-        data_type: VARCHAR(16777216)
+        sample_values:
+          - '29'
+          - '1'
+          - '2'
       - name: CLUSTER_ID
+        description: Unique identifier for a cluster within the network.
         expr: CLUSTER_ID
         data_type: VARCHAR(16777216)
+        sample_values:
+          - ACE7E-CL12
+          - YOGA5-CL11
+          - JAK33-CL23
       - name: CLUSTER_KEY
+        description: Unique identifier for a group of related network elements, such as a cluster of servers or a set of interconnected devices.
         expr: CLUSTER_KEY
         data_type: NUMBER(38,0)
+        sample_values:
+          - '98'
+          - '29'
+          - '1'
       - name: CLUSTER_NAME
+        description: The name of the cluster where the network context is located, which is a logical grouping of servers or nodes that work together to provide a specific service or functionality.
         expr: CLUSTER_NAME
         data_type: VARCHAR(16777216)
-      - name: VENDOR
-        expr: VENDOR
+        sample_values:
+          - Cluster-JAK33-13
+          - Cluster-ACE7E-13
+          - Cluster-SUMC0-22
+      - name: FAT_NAME
+        description: Network context identifier, uniquely identifying a specific network context within the system.
+        expr: FAT_NAME
         data_type: VARCHAR(16777216)
+        sample_values:
+          - FAT-ACE7E-02-B
+          - FAT-ACE7E-01-B
+          - FAT-BAL53-01-B
+      - name: FDT_NAME
+        description: Name of the Fault Detection Tool (FDT) used in the network context.
+        expr: FDT_NAME
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - FDT-ACE7E-02-A
+          - FDT-PAP4A-01-A
+          - FDT-ACE7E-01-A
       - name: FIRMWARE_VERSION
+        description: The version of the firmware installed on the network device.
         expr: FIRMWARE_VERSION
         data_type: VARCHAR(16777216)
-
+        sample_values:
+          - v5.11
+          - v5.10
+          - v5.12
+      - name: OLT_ID
+        description: Unique identifier for the Optical Line Terminal (OLT) device in the network.
+        expr: OLT_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - OLT-JAW42-02
+          - OLT-YOGA5-02
+          - OLT-ACE7E-01
+      - name: OLT_KEY
+        description: Unique identifier for an Optical Line Terminal (OLT) in the network.
+        expr: OLT_KEY
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '29'
+          - '1'
+          - '2'
+      - name: PROVINCE
+        description: Province where the network is located.
+        expr: PROVINCE
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Kalimantan Barat
+          - Aceh
+          - Bangka Belitung
+      - name: REGION
+        description: Geographic region where the network is located.
+        expr: REGION
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Sumatra
+          - Java
+          - Bali & Nusa Tenggara
+      - name: VENDOR
+        description: The name of the vendor providing the network equipment or service.
+        expr: VENDOR
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - ZTE
+          - Nokia
+          - Huawei
+    primary_key:
+      columns:
+        - CLUSTER_ID
+        - CLUSTER_KEY
   - name: FACT_ONT_STATUS
+    description: This table stores real-time status and performance metrics for Optical Network Terminals (ONTs) in a telecommunications network, including registration status, alarm and fault indicators, signal quality metrics, and environmental conditions, aggregated by city, province, region, and cluster, with timestamped data for hourly and daily analysis.
     base_table:
       database: HACKATHON
       schema: DATAMART
       table: FACT_ONT_STATUS
-    primary_key:
-      columns:
-        - TIMESTAMP_1H
-        - OLT_ID
-        - CLUSTER_ID
-    time_dimensions:
-      - name: TIMESTAMP_1H
-        expr: TIMESTAMP_1H
-        data_type: TIMESTAMP_NTZ
-      - name: DATE
-        expr: DATE
-        data_type: DATE
     dimensions:
       - name: CITY
+        description: Province or region where the customer is located.
         expr: CITY
         data_type: VARCHAR(16777216)
+        sample_values:
+          - Sulawesi Barat
+          - Gorontalo
+          - Jambi
       - name: CITY_KEY
+        description: Unique identifier for a city in the ontology.
         expr: CITY_KEY
         data_type: NUMBER(38,0)
-      - name: PROVINCE
-        expr: PROVINCE
-        data_type: VARCHAR(16777216)
-      - name: REGION
-        expr: REGION
-        data_type: VARCHAR(16777216)
-      - name: OLT_ID
-        expr: OLT_ID
-        data_type: VARCHAR(16777216)
-      - name: OLT_KEY
-        expr: OLT_KEY
-        data_type: NUMBER(38,0)
-      - name: FDT_NAME
-        expr: FDT_NAME
-        data_type: VARCHAR(16777216)
-      - name: FAT_NAME
-        expr: FAT_NAME
-        data_type: VARCHAR(16777216)
+        sample_values:
+          - '17'
+          - '23'
+          - '25'
       - name: CLUSTER_ID
+        description: Unique identifier for a cluster within a data center.
         expr: CLUSTER_ID
         data_type: VARCHAR(16777216)
+        sample_values:
+          - LAMB9-CL12
+          - LAMB9-CL22
+          - SUL43-CL12
       - name: CLUSTER_KEY
+        description: Unique identifier for a cluster of related ontologies.
         expr: CLUSTER_KEY
         data_type: NUMBER(38,0)
+        sample_values:
+          - '102'
+          - '35'
+          - '108'
       - name: CLUSTER_NAME
+        description: The name of the cluster where the ONT (Optical Network Terminal) is located.
         expr: CLUSTER_NAME
         data_type: VARCHAR(16777216)
-      - name: HOUR_OF_DAY
-        expr: HOUR_OF_DAY
-        data_type: NUMBER(38,0)
+        sample_values:
+          - Cluster-SUL43-22
+          - Cluster-SUM7E-22
+          - Cluster-BANF4-11
       - name: DAY_OF_WEEK
+        description: The day of the week on which a specific status occurred, where 1 = Sunday, 2 = Monday, 3 = Tuesday, 4 = Wednesday, 5 = Thursday, 6 = Friday, and 7 = Saturday.
         expr: DAY_OF_WEEK
         data_type: NUMBER(38,0)
+        sample_values:
+          - '2'
+          - '3'
+          - '4'
+      - name: FAT_NAME
+        description: Name of the Fatigue Test.
+        expr: FAT_NAME
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - FAT-SUL6F-02-B
+          - FAT-SUL43-02-B
+          - FAT-JAM02-01-B
+      - name: FDT_NAME
+        description: Device Type Name
+        expr: FDT_NAME
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - FDT-SUM7E-02-A
+          - FDT-LAMB9-02-A
+          - FDT-JAK33-02-A
+      - name: HOUR_OF_DAY
+        description: The hour of the day when a specific status occurred, represented in 24-hour format.
+        expr: HOUR_OF_DAY
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '10'
+          - '20'
+          - '14'
       - name: IS_MAINTENANCE_WINDOW
+        description: Indicates whether the current time falls within a scheduled maintenance window for the ONT (Optical Network Terminal), where 0 means it is not in a maintenance window and 1 means it is.
         expr: IS_MAINTENANCE_WINDOW
         data_type: BOOLEAN
+        sample_values:
+          - '0'
+          - '1'
+      - name: OLT_ID
+        description: Unique identifier for the Optical Line Terminal (OLT) device, which is a critical component in a fiber-optic network that connects multiple Optical Network Terminals (ONTs) to a single fiber.
+        expr: OLT_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - OLT-JAW42-01
+          - OLT-JAM02-01
+          - OLT-SUL10-02
+      - name: OLT_KEY
+        description: Unique identifier for an Optical Line Terminal (OLT) device in the network.
+        expr: OLT_KEY
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '64'
+          - '35'
+          - '28'
       - name: PRECURSOR_FLAG
         expr: PRECURSOR_FLAG
         data_type: BOOLEAN
+      - name: PROVINCE
+        description: Province where the customer is located.
+        expr: PROVINCE
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Aceh
+          - Sumatera Utara
+          - Yogyakarta
+      - name: REGION
+        description: Geographical region where the ONT (Optical Network Terminal) is located.
+        expr: REGION
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Maluku
+          - Java
+          - Sumatra
+    time_dimensions:
+      - name: DATE
+        description: Date of status update or change.
+        expr: DATE
+        data_type: DATE
+        sample_values:
+          - 2023-06-13T00:00:00.000+0000
+          - 2024-01-22T00:00:00.000+0000
+          - 2023-05-03T00:00:00.000+0000
+      - name: TIMESTAMP_1H
+        description: Date and time when the status was last updated, rounded to the nearest hour.
+        expr: TIMESTAMP_1H
+        data_type: TIMESTAMP_NTZ
+        sample_values:
+          - 2023-06-21T15:00:00.000+0000
+          - 2023-06-08T05:00:00.000+0000
+          - 2023-05-03T15:00:00.000+0000
     facts:
-      - name: ONT_REGISTERED
-        expr: ONT_REGISTERED
-        data_type: NUMBER(38,0)
-      - name: OFFLINE_ONT_NOW
-        expr: OFFLINE_ONT_NOW
-        data_type: NUMBER(38,0)
-      - name: OFFLINE_ONT_RATIO
-        expr: OFFLINE_ONT_RATIO
-        data_type: FLOAT
-      - name: LINK_LOSS_COUNT
-        expr: LINK_LOSS_COUNT
-        data_type: NUMBER(38,0)
-      - name: BAD_RSL_COUNT
-        expr: BAD_RSL_COUNT
-        data_type: NUMBER(38,0)
-      - name: HIGH_TEMP_COUNT
-        expr: HIGH_TEMP_COUNT
-        data_type: NUMBER(38,0)
-      - name: DYING_GASP_COUNT
-        expr: DYING_GASP_COUNT
-        data_type: NUMBER(38,0)
       - name: ALARM_SPIKE_FLAG
+        description: Indicates whether an alarm spike has occurred, with 1 representing a spike and 0 representing no spike.
         expr: ALARM_SPIKE_FLAG
         data_type: BOOLEAN
-      - name: TRAP_TREND_SCORE
-        expr: TRAP_TREND_SCORE
+        sample_values:
+          - '1'
+          - '0'
+      - name: BAD_RSL_COUNT
+        description: The number of bad radio signal level (RSL) readings for a specific cell or sector in the network.
+        expr: BAD_RSL_COUNT
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '0'
+      - name: DYING_GASP_COUNT
+        description: The number of dying gasp messages sent by an ONT (Optical Network Terminal) before it goes offline.
+        expr: DYING_GASP_COUNT
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '0'
+          - '2'
+          - '3'
+      - name: FAULT_RATE
+        description: The percentage of time that the ONT (Optical Network Terminal) is in a faulty or non-operational state, indicating the reliability and performance of the ONT.
+        expr: FAULT_RATE
         data_type: FLOAT
-      - name: SNR_AVG
-        expr: SNR_AVG
+        sample_values:
+          - '0.003480278422'
+          - '0.008274231678'
+          - '0.003333333333'
+      - name: HIGH_TEMP_COUNT
+        description: The number of times the temperature exceeded a predetermined high threshold.
+        expr: HIGH_TEMP_COUNT
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '0'
+      - name: LINK_LOSS_COUNT
+        description: The number of times a link loss has occurred, indicating a disruption in the optical network transmission.
+        expr: LINK_LOSS_COUNT
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '2'
+          - '16'
+          - '0'
+      - name: OFFLINE_ONT_NOW
+        description: The number of ONTs (Optical Network Terminals) that are currently offline.
+        expr: OFFLINE_ONT_NOW
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '4'
+          - '2'
+          - '5'
+      - name: OFFLINE_ONT_RATIO
+        description: The percentage of ONTs (Optical Network Terminals) that are currently offline compared to the total number of ONTs.
+        expr: OFFLINE_ONT_RATIO
         data_type: FLOAT
-      - name: RX_POWER_AVG
-        expr: RX_POWER_AVG
-        data_type: FLOAT
-      - name: RX_POWER_AVG_DBM
-        expr: RX_POWER_AVG_DBM
-        data_type: FLOAT
-      - name: TEMPERATURE_AVG_C
-        expr: TEMPERATURE_AVG_C
-        data_type: FLOAT
-      - name: TEMP_ANOMALY_SCORE
-        expr: TEMP_ANOMALY_SCORE
-        data_type: FLOAT
+        sample_values:
+          - '0.001558141194'
+          - '0.001653168442'
+          - '-0.001287901102'
+      - name: ONT_REGISTERED
+        description: The number of Optical Network Terminals (ONTs) that have been successfully registered on the network.
+        expr: ONT_REGISTERED
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '634'
+          - '561'
+          - '635'
       - name: OUTAGE_NOW
+        description: Indicates whether an outage is currently in progress (1) or not (0).
         expr: OUTAGE_NOW
         data_type: BOOLEAN
+        sample_values:
+          - '1'
+          - '0'
+      - name: RX_POWER_AVG
+        description: The average received signal power level measured in decibels (dB) for a specific optical network terminal (ONT).
+        expr: RX_POWER_AVG
+        data_type: FLOAT
+        sample_values:
+          - '-19.398602203'
+          - '-19.059684762'
+          - '-18.625528797'
+      - name: RX_POWER_AVG_DBM
+        description: The average received signal power in decibels per milliwatt (dBm) for a specific time period.
+        expr: RX_POWER_AVG_DBM
+        data_type: FLOAT
+        sample_values:
+          - '-20.38913403'
+          - '-19.059684762'
+          - '-18.649241996'
+      - name: SNR_AVG
+        description: Average Signal-to-Noise Ratio (SNR) measured across all optical network terminals (ONTs).
+        expr: SNR_AVG
+        data_type: FLOAT
+        sample_values:
+          - '26.437569924'
+          - '26.348205988'
+          - '25.553307306'
       - name: STRESS
         expr: STRESS
         data_type: FLOAT
-      - name: FAULT_RATE
-        expr: FAULT_RATE
+      - name: TEMP_ANOMALY_SCORE
+        description: A measure representing the degree of deviation from normal temperature patterns, with negative values indicating lower-than-expected temperatures and the magnitude of the value indicating the severity of the anomaly.
+        expr: TEMP_ANOMALY_SCORE
         data_type: FLOAT
-
+        sample_values:
+          - '-0.5436705434'
+          - '-0.338612385'
+          - '-0.5964115657'
+      - name: TEMPERATURE_AVG_C
+        description: The average temperature reading in degrees Celsius.
+        expr: TEMPERATURE_AVG_C
+        data_type: FLOAT
+        sample_values:
+          - '38.67557969'
+          - '36.416778882'
+          - '36.817460904'
+      - name: TRAP_TREND_SCORE
+        description: The TRAP_TREND_SCORE column represents a calculated score indicating the trend of trap-related events, with negative values suggesting a decreasing trend and positive values indicating an increasing trend, allowing for the analysis of changes in trap activity over time.
+        expr: TRAP_TREND_SCORE
+        data_type: FLOAT
+        sample_values:
+          - '-0.02340093604'
+          - '0.02529510961'
+          - '0.01246882793'
+    primary_key:
+      columns:
+        - CLUSTER_KEY
   - name: FACT_ML_FEATURES
+    description: This table stores features and metrics related to the performance and status of Optical Network Terminals (ONTs) in a telecommunications network, including geographical information, alarm and fault data, signal quality metrics, and maintenance window indicators, with a focus on predicting outages and anomalies.
     base_table:
       database: HACKATHON
       schema: DATAMART
       table: FACT_ML_FEATURES
-    primary_key:
-      columns:
-        - TIMESTAMP_1H
-        - OLT_ID
-        - CLUSTER_ID
-    time_dimensions:
-      - name: TIMESTAMP_1H
-        expr: TIMESTAMP_1H
-        data_type: TIMESTAMP_NTZ
     dimensions:
       - name: CITY
+        description: Province or region where the data was collected or related to.
         expr: CITY
         data_type: VARCHAR(16777216)
+        sample_values:
+          - Jakarta Raya
+          - Sumatera Utara
+          - Sulawesi Utara
       - name: CITY_KEY
+        description: Unique identifier for a city, used to join with other tables containing city-level data.
         expr: CITY_KEY
         data_type: NUMBER(38,0)
-      - name: PROVINCE
-        expr: PROVINCE
-        data_type: VARCHAR(16777216)
-      - name: REGION
-        expr: REGION
-        data_type: VARCHAR(16777216)
-      - name: OLT_ID
-        expr: OLT_ID
-        data_type: VARCHAR(16777216)
-      - name: OLT_KEY
-        expr: OLT_KEY
-        data_type: NUMBER(38,0)
-      - name: FDT_NAME
-        expr: FDT_NAME
-        data_type: VARCHAR(16777216)
-      - name: FAT_NAME
-        expr: FAT_NAME
-        data_type: VARCHAR(16777216)
+        sample_values:
+          - '31'
+          - '17'
+          - '25'
       - name: CLUSTER_ID
+        description: Unique identifier for a cluster of similar customers based on their purchasing behavior and demographic characteristics.
         expr: CLUSTER_ID
         data_type: VARCHAR(16777216)
+        sample_values:
+          - YOGA5-CL11
+          - SUL2B-CL23
+          - BAN02-CL11
       - name: CLUSTER_KEY
+        description: Unique identifier for a group of similar customers based on their demographic and behavioral characteristics.
         expr: CLUSTER_KEY
         data_type: NUMBER(38,0)
+        sample_values:
+          - '170'
+          - '59'
+          - '75'
       - name: CLUSTER_NAME
+        description: The name of the cluster to which a machine learning model is assigned, used to group similar models together for analysis and comparison.
         expr: CLUSTER_NAME
         data_type: VARCHAR(16777216)
-      - name: HOUR_OF_DAY
-        expr: HOUR_OF_DAY
-        data_type: NUMBER(38,0)
+        sample_values:
+          - Cluster-KEPF5-23
+          - Cluster-KEPF5-11
+          - Cluster-SUL6F-21
       - name: DAY_OF_WEEK
+        description: The day of the week on which a specific event or transaction occurred, with values representing Monday (0), Tuesday (1), and Sunday (6).
         expr: DAY_OF_WEEK
         data_type: NUMBER(38,0)
+        sample_values:
+          - '6'
+          - '0'
+          - '1'
+      - name: FAT_NAME
+        description: Feature Asset Tag Name
+        expr: FAT_NAME
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - FAT-KAL8F-01-B
+          - FAT-SUL10-01-B
+          - FAT-SUM7E-02-B
+      - name: FDT_NAME
+        description: 'Feature Data Type Name: A unique identifier for the type of feature data being collected, such as sensor or measurement type.'
+        expr: FDT_NAME
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - FDT-SUMFF-01-A
+          - FDT-KAL8F-02-A
+          - FDT-NTB20-02-A
+      - name: HOUR_OF_DAY
+        description: The hour of the day when a specific event or activity occurred, represented in 24-hour format.
+        expr: HOUR_OF_DAY
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '9'
+          - '0'
+          - '17'
       - name: IS_MAINTENANCE_WINDOW
+        description: Indicates whether the time period is within a scheduled maintenance window (1) or not (0).
         expr: IS_MAINTENANCE_WINDOW
         data_type: BOOLEAN
+        sample_values:
+          - '1'
+          - '0'
+      - name: OLT_ID
+        description: Unique identifier for the Optical Line Terminal (OLT) device, which is a critical component in a fiber-optic network that connects multiple Optical Network Terminals (ONTs) to a single fiber.
+        expr: OLT_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - OLT-JAW87-02
+          - OLT-JAW42-02
+          - OLT-JAK33-01
+      - name: OLT_KEY
+        description: Unique identifier for the Online Transaction (OLT) that the machine learning feature is associated with.
+        expr: OLT_KEY
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '66'
+          - '24'
+          - '26'
+      - name: PROVINCE
+        description: Province where the data was collected, representing the geographical region within Indonesia.
+        expr: PROVINCE
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Sumatera Utara
+          - Kepulauan Riau
+          - Sumatera Selatan
+      - name: REGION
+        description: Geographic region where the data was collected or the feature is applicable.
+        expr: REGION
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Maluku
+          - Java
+          - Sumatra
       - name: ROW_NUMBER
+        description: A unique identifier assigned to each record in the fact table, used for data processing and analysis purposes.
         expr: ROW_NUMBER
         data_type: NUMBER(38,0)
+        sample_values:
+          - '969669'
+          - '37316'
+          - '957998'
+    time_dimensions:
+      - name: TIMESTAMP_1H
+        description: The date and time when a specific event or measurement occurred, aggregated to the hour level.
+        expr: TIMESTAMP_1H
+        data_type: TIMESTAMP_NTZ
+        sample_values:
+          - 2023-08-12T03:00:00.000+0000
+          - 2023-08-10T01:00:00.000+0000
+          - 2023-01-08T13:00:00.000+0000
     facts:
-      - name: ONT_REGISTERED
-        expr: ONT_REGISTERED
-        data_type: NUMBER(38,0)
-      - name: OFFLINE_ONT_NOW
-        expr: OFFLINE_ONT_NOW
-        data_type: NUMBER(38,0)
-      - name: OFFLINE_ONT_RATIO
-        expr: OFFLINE_ONT_RATIO
-        data_type: FLOAT
-      - name: LINK_LOSS_COUNT
-        expr: LINK_LOSS_COUNT
-        data_type: NUMBER(38,0)
-      - name: BAD_RSL_COUNT
-        expr: BAD_RSL_COUNT
-        data_type: NUMBER(38,0)
-      - name: HIGH_TEMP_COUNT
-        expr: HIGH_TEMP_COUNT
-        data_type: NUMBER(38,0)
-      - name: DYING_GASP_COUNT
-        expr: DYING_GASP_COUNT
-        data_type: NUMBER(38,0)
       - name: ALARM_SPIKE_FLAG
+        description: Indicates whether a spike in alarm activity has been detected, with 1 representing a spike and 0 representing no spike.
         expr: ALARM_SPIKE_FLAG
         data_type: BOOLEAN
-      - name: TRAP_TREND_SCORE
-        expr: TRAP_TREND_SCORE
-        data_type: FLOAT
+        sample_values:
+          - '1'
+          - '0'
+      - name: BAD_RSL_COUNT
+        description: The number of times a customer has had a bad response to a loan or credit application in the past.
+        expr: BAD_RSL_COUNT
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '3'
+          - '0'
+      - name: DYING_GASP_COUNT
+        description: The number of times a customer's account has been in a state of "dying gasp", indicating a high risk of churn or cancellation, within a specified time period.
+        expr: DYING_GASP_COUNT
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '0'
       - name: FAULT_RATE
+        description: The percentage of time a machine or equipment is not operating due to a fault or failure, indicating the reliability and maintenance needs of the asset.
         expr: FAULT_RATE
         data_type: FLOAT
-      - name: SNR_AVG
-        expr: SNR_AVG
-        data_type: FLOAT
-      - name: RX_POWER_AVG
-        expr: RX_POWER_AVG
-        data_type: FLOAT
-      - name: RX_POWER_AVG_DBM
-        expr: RX_POWER_AVG_DBM
-        data_type: FLOAT
-      - name: TEMPERATURE_AVG_C
-        expr: TEMPERATURE_AVG_C
-        data_type: FLOAT
-      - name: TEMP_ANOMALY_SCORE
-        expr: TEMP_ANOMALY_SCORE
-        data_type: FLOAT
+        sample_values:
+          - '0.006952491309'
+          - '0.005025125628'
+          - '0.006472491909'
+      - name: HIGH_TEMP_COUNT
+        description: The number of times the temperature has exceeded a predetermined high threshold within a specific time period or event.
+        expr: HIGH_TEMP_COUNT
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '0'
+          - '2'
       - name: LABEL_OUTAGE_1H
+        description: Indicates whether an outage occurred within the last hour (1) or not (0).
         expr: LABEL_OUTAGE_1H
         data_type: BOOLEAN
-
+        sample_values:
+          - '0'
+          - '1'
+      - name: LINK_LOSS_COUNT
+        description: The number of times a link has been lost or disconnected, indicating the frequency of interruptions or failures in the connection.
+        expr: LINK_LOSS_COUNT
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '0'
+          - '1'
+          - '2'
+      - name: OFFLINE_ONT_NOW
+        description: The number of times a customer has been offline on their ONT (Optical Network Terminal) in the current billing period.
+        expr: OFFLINE_ONT_NOW
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '6'
+          - '4'
+          - '2'
+      - name: OFFLINE_ONT_RATIO
+        description: The ratio of time a customer's Optical Network Terminal (ONT) is offline compared to the total time it is expected to be online, indicating the reliability and uptime of the customer's internet connection.
+        expr: OFFLINE_ONT_RATIO
+        data_type: FLOAT
+        sample_values:
+          - '0.00846884231'
+          - '0.001158220068'
+          - '0.003814709363'
+      - name: ONT_REGISTERED
+        description: The number of registered users on the Ontario network.
+        expr: ONT_REGISTERED
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '468'
+          - '676'
+          - '878'
+      - name: RX_POWER_AVG
+        description: The average received signal power, measured in decibels (dB), indicating the strength of the signal received by the device.
+        expr: RX_POWER_AVG
+        data_type: FLOAT
+        sample_values:
+          - '-18.151322245'
+          - '-19.465883716'
+          - '-19.099787487'
+      - name: RX_POWER_AVG_DBM
+        description: The average received signal power in decibels per milliwatt (dBm) for a specific period or event.
+        expr: RX_POWER_AVG_DBM
+        data_type: FLOAT
+        sample_values:
+          - '-18.51617501'
+          - '-19.465883716'
+          - '-18.151322245'
+      - name: SNR_AVG
+        description: Average Signal-to-Noise Ratio (SNR) of the signal, representing the ratio of the signal power to the noise power, indicating the quality and reliability of the signal.
+        expr: SNR_AVG
+        data_type: FLOAT
+        sample_values:
+          - '26.206237958'
+          - '25.601157989'
+          - '28.074304271'
+      - name: TEMP_ANOMALY_SCORE
+        description: A measure of the likelihood that the current temperature reading is an anomaly, with higher values indicating a greater likelihood of an anomaly and lower values indicating a normal temperature reading.
+        expr: TEMP_ANOMALY_SCORE
+        data_type: FLOAT
+        sample_values:
+          - '-0.1962036725'
+          - '0.2342877871'
+          - '-0.4546766082'
+      - name: TEMPERATURE_AVG_C
+        description: The average temperature in degrees Celsius.
+        expr: TEMPERATURE_AVG_C
+        data_type: FLOAT
+        sample_values:
+          - '36.721331045'
+          - '36.568812714'
+          - '37.000945794'
+      - name: TRAP_TREND_SCORE
+        description: TRAP Trend Score represents the trend of a specific stock's price movement, with negative values indicating a downward trend and positive values indicating an upward trend, calculated using a proprietary algorithm that takes into account various market and trading data.
+        expr: TRAP_TREND_SCORE
+        data_type: FLOAT
+        sample_values:
+          - '-0.02200488998'
+          - '-0.03005008347'
+          - '0'
   - name: FACT_CUSTOMER_FEEDBACK
+    description: This table stores customer feedback data, including demographic information, network usage, device details, and feedback ratings, to analyze customer satisfaction and sentiment, identify areas for improvement, and inform business decisions to reduce churn and improve overall customer experience.
     base_table:
       database: HACKATHON
       schema: DATAMART
       table: FACT_CUSTOMER_FEEDBACK
-    primary_key:
-      columns:
-        - FEEDBACK_ID
-    time_dimensions:
-      - name: JOIN_DATE
-        expr: JOIN_DATE
-        data_type: DATE
-      - name: ACTIVE_DATE
-        expr: ACTIVE_DATE
-        data_type: DATE
-      - name: LAST_ONLINE_TS
-        expr: LAST_ONLINE_TS
-        data_type: TIMESTAMP_NTZ
-      - name: LAST_OFFLINE_TS
-        expr: LAST_OFFLINE_TS
-        data_type: TIMESTAMP_NTZ
     dimensions:
       - name: CITY
+        description: The city where the customer provided feedback.
         expr: CITY
         data_type: VARCHAR(16777216)
+        sample_values:
+          - Kalimantan Barat
+          - Aceh
+          - Bangka Belitung
       - name: CITY_KEY
+        description: Unique identifier for the city where the customer provided feedback.
         expr: CITY_KEY
         data_type: NUMBER(38,0)
-      - name: PROVINCE
-        expr: PROVINCE
-        data_type: VARCHAR(16777216)
-      - name: REGION
-        expr: REGION
-        data_type: VARCHAR(16777216)
-      - name: OLT_ID
-        expr: OLT_ID
-        data_type: VARCHAR(16777216)
-      - name: OLT_KEY
-        expr: OLT_KEY
-        data_type: NUMBER(38,0)
+        sample_values:
+          - '29'
+          - '1'
+          - '2'
       - name: CLUSTER_ID
+        description: Unique identifier for a group of customers with similar characteristics and preferences, used for targeted marketing and analysis.
         expr: CLUSTER_ID
         data_type: VARCHAR(16777216)
+        sample_values:
+          - ACE7E-CL12
+          - YOGA5-CL11
+          - JAK33-CL23
       - name: CLUSTER_KEY
+        description: A unique identifier for a group of customers with similar characteristics or behaviors, used for segmentation and analysis purposes.
         expr: CLUSTER_KEY
         data_type: NUMBER(38,0)
+        sample_values:
+          - '98'
+          - '29'
+          - '1'
       - name: CLUSTER_NAME
+        description: The name of the cluster or group that the customer feedback is associated with, which can be used to categorize and analyze feedback by specific business segments or regions.
         expr: CLUSTER_NAME
         data_type: VARCHAR(16777216)
+        sample_values:
+          - Cluster-JAK33-13
+          - Cluster-ACE7E-13
+          - Cluster-SUMC0-22
       - name: CUSTOMER_ID
+        description: Unique identifier for the customer who provided the feedback.
         expr: CUSTOMER_ID
         data_type: VARCHAR(16777216)
-      - name: HOME_PASS
-        expr: HOME_PASS
-        data_type: VARCHAR(16777216)
-      - name: HOME_CONNECT_ID
-        expr: HOME_CONNECT_ID
-        data_type: VARCHAR(16777216)
-      - name: DEVICE_STATUS
-        expr: DEVICE_STATUS
-        data_type: VARCHAR(16777216)
+        sample_values:
+          - CUST00052
+          - CUST00054
+          - CUST00001
       - name: DEVICE_LINK_OS
+        description: The current status of the device link operating system, indicating whether it is functioning normally (Up), experiencing intermittent connectivity issues (Flapping), or completely non-operational (Down).
         expr: DEVICE_LINK_OS
         data_type: VARCHAR(16777216)
-      - name: OFFLINE_REASON
-        expr: OFFLINE_REASON
+        sample_values:
+          - Up
+          - Flapping
+          - Down
+      - name: DEVICE_STATUS
+        description: The current status of the customer's device, indicating whether it is currently connected (Online) or not connected (Offline) to the system.
+        expr: DEVICE_STATUS
         data_type: VARCHAR(16777216)
+        sample_values:
+          - Offline
+          - Online
       - name: FEEDBACK_CHANNEL
+        description: The channel through which the customer provided their feedback.
         expr: FEEDBACK_CHANNEL
         data_type: VARCHAR(16777216)
-      - name: FEEDBACK_TOPIC
-        expr: FEEDBACK_TOPIC
-        data_type: VARCHAR(16777216)
-      - name: SENTIMENT_LABEL
-        expr: SENTIMENT_LABEL
-        data_type: VARCHAR(16777216)
+        sample_values:
+          - Web Form
+          - Whatsapp
+          - App Chat
       - name: FEEDBACK_ID
+        description: Unique identifier for each customer feedback record.
         expr: FEEDBACK_ID
         data_type: VARCHAR(16777216)
+        sample_values:
+          - FB-722DDA445ED697E9
+          - FB-1DABF85D1748DC79
+          - FB-4472C720EDCAC9F6
+      - name: FEEDBACK_TOPIC
+        description: The topic or subject of the customer's feedback, such as issues related to billing or connectivity.
+        expr: FEEDBACK_TOPIC
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Billing
+          - Connectivity
+      - name: HOME_CONNECT_ID
+        description: Unique identifier for a customer's home connection.
+        expr: HOME_CONNECT_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - HC-KALF8-000090
+          - HC-YOGA5-000202
+          - HC-JAM02-000045
+      - name: HOME_PASS
+        description: Unique identifier for a specific home pass.
+        expr: HOME_PASS
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - HP-SUM7E-00196
+          - HP-ACE7E-00000
+          - HP-ACE7E-00001
+      - name: OFFLINE_REASON
+        description: The reason why a customer's internet service was unavailable or not functioning properly when they were not connected to the network.
+        expr: OFFLINE_REASON
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Fiber issue
+          - Power outage
+          - Unknown
+      - name: OLT_ID
+        description: Unique identifier for the Optical Line Terminal (OLT) device that serves the customer.
+        expr: OLT_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - OLT-JAW42-02
+          - OLT-YOGA5-02
+          - OLT-ACE7E-01
+      - name: OLT_KEY
+        description: Unique identifier for the customer feedback record.
+        expr: OLT_KEY
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '29'
+          - '1'
+          - '2'
+      - name: PROVINCE
+        description: Province where the customer is located.
+        expr: PROVINCE
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Kalimantan Barat
+          - Aceh
+          - Bangka Belitung
       - name: RATING_1_5
+        description: Customer satisfaction rating on a scale of 1 to 5, where 1 is the lowest and 5 is the highest, representing the customer's overall satisfaction with the product or service.
         expr: RATING_1_5
         data_type: NUMBER(38,0)
+        sample_values:
+          - '2'
+          - '5'
+          - '3'
+      - name: REGION
+        description: Geographic region where the customer is located.
+        expr: REGION
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Sumatra
+          - Java
+          - Bali & Nusa Tenggara
+      - name: SENTIMENT_LABEL
+        description: The sentiment or emotional tone expressed by a customer in their feedback, categorized as neutral, negative, or positive.
+        expr: SENTIMENT_LABEL
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - neutral
+          - negative
+          - positive
+    time_dimensions:
+      - name: ACTIVE_DATE
+        description: Date when the customer feedback was provided or became active.
+        expr: ACTIVE_DATE
+        data_type: DATE
+        sample_values:
+          - 2020-03-31T00:00:00.000+0000
+          - 2020-01-31T00:00:00.000+0000
+          - 2020-08-08T00:00:00.000+0000
+      - name: JOIN_DATE
+        description: Date when the customer joined the service.
+        expr: JOIN_DATE
+        data_type: DATE
+        sample_values:
+          - 2020-03-31T00:00:00.000+0000
+          - 2020-01-31T00:00:00.000+0000
+          - 2020-08-08T00:00:00.000+0000
+      - name: LAST_OFFLINE_TS
+        description: The date and time when the customer was last inactive or offline.
+        expr: LAST_OFFLINE_TS
+        data_type: TIMESTAMP_NTZ
+        sample_values:
+          - 2024-12-24T06:00:00.000+0000
+          - 2024-12-29T21:00:00.000+0000
+          - 2024-12-17T16:00:00.000+0000
+      - name: LAST_ONLINE_TS
+        description: The date and time when the customer was last active or online.
+        expr: LAST_ONLINE_TS
+        data_type: TIMESTAMP_NTZ
+        sample_values:
+          - 2024-12-17T23:00:00.000+0000
+          - 2024-12-15T08:00:00.000+0000
+          - 2024-12-19T08:00:00.000+0000
     facts:
-      - name: USER_SATISFACTION_SCORE
-        expr: USER_SATISFACTION_SCORE
-        data_type: NUMBER(38,0)
-      - name: COMPLAINTS_THIS_MONTH
-        expr: COMPLAINTS_THIS_MONTH
-        data_type: NUMBER(38,0)
-      - name: LATE_PAYMENT_COUNT
-        expr: LATE_PAYMENT_COUNT
-        data_type: NUMBER(38,0)
       - name: CHURN_FLAG
+        description: Indicates whether a customer has stopped doing business with the company (1) or is still an active customer (0).
         expr: CHURN_FLAG
         data_type: BOOLEAN
-      - name: NETWORK_USAGE_GB
-        expr: NETWORK_USAGE_GB
-        data_type: FLOAT
+        sample_values:
+          - '1'
+          - '0'
+      - name: COMPLAINTS_THIS_MONTH
+        description: The total number of complaints received from a customer in the current month.
+        expr: COMPLAINTS_THIS_MONTH
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '2'
+          - '1'
+          - '3'
       - name: CUSTOMER_AGE
+        description: The age of the customer who provided the feedback.
         expr: CUSTOMER_AGE
         data_type: NUMBER(38,0)
-
+        sample_values:
+          - '65'
+          - '50'
+          - '28'
+      - name: LATE_PAYMENT_COUNT
+        description: The number of times a customer has made a payment after the due date.
+        expr: LATE_PAYMENT_COUNT
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '2'
+          - '1'
+          - '0'
+      - name: NETWORK_USAGE_GB
+        description: The total amount of network data used by the customer in gigabytes.
+        expr: NETWORK_USAGE_GB
+        data_type: FLOAT
+        sample_values:
+          - '99.8'
+          - '77.6'
+          - '145.6'
+      - name: USER_SATISFACTION_SCORE
+        description: A measure of how satisfied a customer is with the product or service, represented as a decimal value between 0 and 1, where 1 represents complete satisfaction.
+        expr: USER_SATISFACTION_SCORE
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '0.8020097923'
+          - '0.8684077093'
+          - '0.9154229217'
+    primary_key:
+      columns:
+        - CUSTOMER_ID
+        - CLUSTER_ID
+        - CLUSTER_KEY
   - name: FACT_EVENT_TRANSCRIPTS
+    description: This table stores event transcripts, which are detailed records of specific events that have occurred within a system or application. Each record is associated with a unique identifier (OLT_ID) and is linked to a cluster (CLUSTER_ID) and a specific transcript (TRANSCRIPT_ID). The table captures the type of event (EVENT_TYPE) and its severity level (SEVERITY_BUCKET), as well as the actual transcript of the event (EVENT_TRANSCRIPT). The timestamp of the event is also recorded, rounded to the nearest hour (TIMESTAMP_1H).
     base_table:
       database: HACKATHON
       schema: DATAMART
       table: FACT_EVENT_TRANSCRIPTS
+    dimensions:
+      - name: CLUSTER_ID
+        description: Unique identifier for a group of related events or transactions, used to categorize and analyze events that occur within the same cluster or batch.
+        expr: CLUSTER_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - KAL57-CL12
+          - PAP4A-CL12
+          - KAL8F-CL12
+      - name: EVENT_TRANSCRIPT
+        description: This column contains the transcripts of various events related to network equipment, including shift handovers, ticket notes, and NOC logs, providing detailed information about the equipment's status, performance metrics, and any alarms or issues.
+        expr: EVENT_TRANSCRIPT
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - '[Shift Handover] Duty Engineer: KPIs normal at Bali / Cluster-BAL53-21 (OLT-BAL53-02); rx=-18.0 dBm, SNR=26.6 dB; offline=0.5%; fault_rate=0.753%; temp=36.6 C; alarms LL:2 RSL:3 HT:0 DG:1.'
+          - '[Ticket Note] Tier-2: KPIs normal at Maluku Utara / Cluster-MALCD-12 (OLT-MALCD-01); temp=36.8 C; fault_rate=0.365%; rx=-18.2 dBm, SNR=26.6 dB; offline=0.4%; alarms LL:1 RSL:0 HT:1 DG:0.'
+          - '[NOC Log] Duty Engineer: Healthy state at Maluku Utara / Cluster-MALCD-22 (OLT-MALCD-02); no material alarms.'
+      - name: EVENT_TYPE
+        description: The type of event that triggered the creation of the transcript, such as an imminent outage, a healthy system status, or a minor issue.
+        expr: EVENT_TYPE
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - imminent_outage
+          - healthy
+          - minor
+      - name: OLT_ID
+        description: Unique identifier for the Optical Line Terminal (OLT) device, which is a critical component in a fiber-optic network that connects multiple Optical Network Terminals (ONTs) to a single fiber.
+        expr: OLT_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - OLT-NTTD5-01
+          - OLT-BANF4-02
+          - OLT-ACE7E-01
+      - name: SEVERITY_BUCKET
+        description: The severity level of the event, categorized as minor, major, or normal, indicating the level of impact or disruption caused by the event.
+        expr: SEVERITY_BUCKET
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - minor
+          - major
+          - normal
+      - name: TRANSCRIPT_ID
+        description: Unique identifier for a specific event transcript.
+        expr: TRANSCRIPT_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - TX-900BB6ED02503711
+          - TX-C5BE67EE93E18756
+          - TX-A8BCFC3EFB4F6DA2
+    time_dimensions:
+      - name: TIMESTAMP_1H
+        description: The hour in which the event occurred, rounded down to the nearest hour.
+        expr: TIMESTAMP_1H
+        data_type: TIMESTAMP_NTZ
+        sample_values:
+          - 2023-01-01T00:00:00.000+0000
+          - 2023-01-01T02:00:00.000+0000
+          - 2023-01-01T01:00:00.000+0000
     primary_key:
       columns:
         - TRANSCRIPT_ID
-    time_dimensions:
-      - name: TIMESTAMP_1H
-        expr: TIMESTAMP_1H
-        data_type: TIMESTAMP_NTZ
-    dimensions:
-      - name: TRANSCRIPT_ID
-        expr: TRANSCRIPT_ID
-        data_type: VARCHAR(16777216)   # adjust if it's NUMBER
-      - name: OLT_ID
-        expr: OLT_ID
-        data_type: VARCHAR(16777216)
-      - name: CLUSTER_ID
-        expr: CLUSTER_ID
-        data_type: VARCHAR(16777216)
-      - name: EVENT_TYPE
-        expr: EVENT_TYPE
-        data_type: VARCHAR(16777216)
-      - name: SEVERITY_BUCKET
-        expr: SEVERITY_BUCKET
-        data_type: VARCHAR(16777216)
-      - name: EVENT_TRANSCRIPT
-        expr: EVENT_TRANSCRIPT
-        data_type: VARCHAR(16777216)
-
+        - TIMESTAMP_1H
+        - OLT_ID
+        - CLUSTER_ID
   - name: FACT_INCIDENT_TREND_SUMMARY
+    description: This table stores daily incident trend summaries for network performance in different cities and regions, tracking various metrics such as link loss, bad RSL (Received Signal Level), high temperature, and dying gasp alarms, as well as fault rates and comparisons to the previous day's performance.
     base_table:
       database: HACKATHON
       schema: DATAMART
       table: FACT_INCIDENT_TREND_SUMMARY
-    time_dimensions:
-      - name: DATE
-        expr: DATE
-        data_type: DATE
     dimensions:
       - name: CITY
+        description: The city or province where the incident occurred.
         expr: CITY
         data_type: VARCHAR(16777216)
+        sample_values:
+          - Aceh
+          - Bangka Belitung
+          - Bali
       - name: CITY_KEY
+        description: Unique identifier for a city, used to link to the CITY dimension table for further geographic information.
         expr: CITY_KEY
         data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '3'
       - name: REGION
+        description: Geographic region where the incident occurred.
         expr: REGION
         data_type: VARCHAR(16777216)
+        sample_values:
+          - Sulawesi
+          - Sumatra
+          - Java
+    time_dimensions:
+      - name: DATE
+        description: Date of incident occurrence.
+        expr: DATE
+        data_type: DATE
+        sample_values:
+          - 2023-02-17T00:00:00.000+0000
+          - 2023-12-24T00:00:00.000+0000
+          - 2023-11-27T00:00:00.000+0000
     facts:
-      - name: LINK_LOSS_COUNT
-        expr: LINK_LOSS_COUNT
-        data_type: NUMBER(38,0)
       - name: BAD_RSL_COUNT
+        description: The total number of incidents with a bad resolution status.
         expr: BAD_RSL_COUNT
         data_type: NUMBER(38,0)
-      - name: HIGH_TEMP_COUNT
-        expr: HIGH_TEMP_COUNT
-        data_type: NUMBER(38,0)
-      - name: DYING_GASP_COUNT
-        expr: DYING_GASP_COUNT
-        data_type: NUMBER(38,0)
-      - name: TOTAL_ONTS
-        expr: TOTAL_ONTS
-        data_type: NUMBER(38,0)
-      - name: TOTAL_ALARMS
-        expr: TOTAL_ALARMS
-        data_type: NUMBER(38,0)
-      - name: FAULT_RATE_DAILY
-        expr: FAULT_RATE_DAILY
-        data_type: FLOAT
-      - name: LINK_LOSS_VS_YESTERDAY
-        expr: LINK_LOSS_VS_YESTERDAY
-        data_type: FLOAT
+        sample_values:
+          - '166'
+          - '132'
+          - '126'
       - name: BAD_RSL_VS_YESTERDAY
+        description: Percentage change in bad response time compared to yesterday.
         expr: BAD_RSL_VS_YESTERDAY
         data_type: FLOAT
-      - name: HIGH_TEMP_VS_YESTERDAY
-        expr: HIGH_TEMP_VS_YESTERDAY
-        data_type: FLOAT
+        sample_values:
+          - '0'
+          - '0.1779661017'
+          - '0.07692307692'
+      - name: DYING_GASP_COUNT
+        description: The total number of dying gasp incidents that occurred during a specific time period.
+        expr: DYING_GASP_COUNT
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '65'
+          - '66'
+          - '50'
       - name: DYING_GASP_VS_YESTERDAY
+        description: The percentage change in the number of dying gasps (i.e., the last gasp of breath before a system or process fails) compared to the same time yesterday.
         expr: DYING_GASP_VS_YESTERDAY
         data_type: FLOAT
-
+        sample_values:
+          - '0'
+          - '0.09836065574'
+          - '0.1'
+      - name: FAULT_RATE_DAILY
+        description: The percentage of incidents that occurred on a daily basis, calculated by dividing the number of incidents by the total number of opportunities (e.g. flights, trips, etc.) for that day.
+        expr: FAULT_RATE_DAILY
+        data_type: FLOAT
+        sample_values:
+          - '0.003317704191'
+          - '0.003218157182'
+          - '0.003694529133'
+      - name: HIGH_TEMP_COUNT
+        description: The total number of incidents that occurred when the temperature was higher than a predetermined threshold, indicating a high-temperature condition.
+        expr: HIGH_TEMP_COUNT
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '65'
+          - '50'
+          - '64'
+      - name: HIGH_TEMP_VS_YESTERDAY
+        description: The percentage change in high temperature compared to the same day yesterday.
+        expr: HIGH_TEMP_VS_YESTERDAY
+        data_type: FLOAT
+        sample_values:
+          - '0'
+          - '0.2'
+          - '0.5510204082'
+      - name: LINK_LOSS_COUNT
+        description: The total number of link loss incidents that occurred during a specific time period.
+        expr: LINK_LOSS_COUNT
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '61'
+          - '68'
+          - '54'
+      - name: LINK_LOSS_VS_YESTERDAY
+        description: The percentage change in link loss incidents compared to the same time yesterday.
+        expr: LINK_LOSS_VS_YESTERDAY
+        data_type: FLOAT
+        sample_values:
+          - '0'
+          - '0.07692307692'
+          - '-0.3148148148'
+      - name: TOTAL_ALARMS
+        description: The total number of alarms triggered during a specific time period, indicating the overall frequency of incidents or events that require attention or action.
+        expr: TOTAL_ALARMS
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '304'
+          - '321'
+          - '349'
+      - name: TOTAL_ONTS
+        description: Total number of on-time shipments.
+        expr: TOTAL_ONTS
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '95160'
+          - '96864'
+          - '96138'
   - name: FACT_TICKET_SUMMARY
+    description: This table stores summary information about tickets related to network or equipment issues, including ticket status, issue types, root causes, and resolution details, as well as metrics such as ticket duration, downtime, and customer information.
     base_table:
       database: HACKATHON
       schema: DATAMART
       table: FACT_TICKET_SUMMARY
-    time_dimensions:
-      - name: DATE
-        expr: DATE
-        data_type: DATE
-      - name: SCHEDULE_TIME
-        expr: SCHEDULE_TIME
-        data_type: TIMESTAMP_NTZ
     dimensions:
-      - name: CITY
-        expr: CITY
-        data_type: VARCHAR(16777216)
-      - name: CITY_KEY
-        expr: CITY_KEY
-        data_type: NUMBER(38,0)
-      - name: REGION
-        expr: REGION
-        data_type: VARCHAR(16777216)
-      - name: CASE_ID
-        expr: CASE_ID
-        data_type: VARCHAR(16777216)
-      - name: XL_ID
-        expr: XL_ID
-        data_type: VARCHAR(16777216)
-      - name: CLOSE_SUBJECT
-        expr: CLOSE_SUBJECT
-        data_type: VARCHAR(16777216)
-      - name: VENDOR
-        expr: VENDOR
-        data_type: VARCHAR(16777216)
       - name: ACTION_TAKEN
+        description: The action taken to resolve the issue reported in the ticket.
         expr: ACTION_TAKEN
         data_type: VARCHAR(16777216)
-      - name: CUSTOMER_ID
-        expr: CUSTOMER_ID
-        data_type: VARCHAR(16777216)
-      - name: RCA_A
-        expr: RCA_A
-        data_type: VARCHAR(16777216)
-      - name: RCA_G
-        expr: RCA_G
-        data_type: VARCHAR(16777216)
-      - name: RCA_D
-        expr: RCA_D
-        data_type: VARCHAR(16777216)
-      - name: INDICATOR_STATUS
-        expr: INDICATOR_STATUS
-        data_type: VARCHAR(16777216)
+        sample_values:
+          - Clean connector
+          - Reboot OLT port
+          - Dispatch field team
       - name: ACTIVE_FLAG
+        description: Indicates whether a ticket is currently active (1) or inactive (0).
         expr: ACTIVE_FLAG
         data_type: BOOLEAN
+        sample_values:
+          - '1'
+          - '0'
+      - name: CASE_ID
+        description: Unique identifier for a customer support case.
+        expr: CASE_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - CASE-100241
+          - CASE-100234
+          - CASE-100089
+      - name: CITY
+        description: The city where the ticket was issued or related to.
+        expr: CITY
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Aceh
+          - Bangka Belitung
+          - Bali
+      - name: CITY_KEY
+        description: Unique identifier for the city where the ticket was issued.
+        expr: CITY_KEY
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '3'
+      - name: CLOSE_SUBJECT
+        description: The reason or subject for which the ticket was closed.
+        expr: CLOSE_SUBJECT
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Fiber repair
+          - Port reset
+          - Config fix
+      - name: CUSTOMER_ID
+        description: Unique identifier for the customer who purchased the ticket.
+        expr: CUSTOMER_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - CUST00071
+          - CUST00034
+          - CUST00189
+      - name: INDICATOR_STATUS
+        description: The current status of a ticket, indicating whether it is still open and being worked on, has been closed and resolved, or is being monitored for potential issues.
+        expr: INDICATOR_STATUS
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Open
+          - Closed
+          - Monitoring
+      - name: RCA_A
+        description: Root Cause Analysis (RCA) category for the ticket, indicating the primary area of the network or system where the issue originated, such as Aggregation, Backhaul, or Access.
+        expr: RCA_A
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Aggregation
+          - Backhaul
+          - Access
+      - name: RCA_D
+        description: 'Root Cause Analysis Description: A high-level categorization of the underlying reason for a network issue or outage, such as a problem with the fiber optic cable, a cut in the patchcore, or a faulty Small Form-factor Pluggable (SFP) component.'
+        expr: RCA_D
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Fiber attenuation
+          - Patchcore cut
+          - SFP faulty
+      - name: RCA_G
+        description: 'Root Cause Analysis Group: a categorization of the underlying reason for a ticket, indicating whether the issue is related to a Physical problem, a Configuration issue, or is Unknown.'
+        expr: RCA_G
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Physical
+          - Configuration
+          - Unknown
+      - name: REGION
+        description: Geographic region where the ticket was issued or related to.
+        expr: REGION
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - Sulawesi
+          - Sumatra
+          - Java
+      - name: VENDOR
+        description: The name of the vendor that provided the equipment or service related to the ticket.
+        expr: VENDOR
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - ZTE
+          - Nokia
+          - Huawei
+      - name: XL_ID
+        description: Unique identifier for a specific ticket or transaction, likely generated by an external system (XL) and including a date component.
+        expr: XL_ID
+        data_type: VARCHAR(16777216)
+        sample_values:
+          - XL-ACE7E-20230401-00001
+          - XL-ACE7E-20230629-00001
+          - XL-ACE7E-20230731-00001
+    time_dimensions:
+      - name: DATE
+        description: Date the ticket was created or updated.
+        expr: DATE
+        data_type: DATE
+        sample_values:
+          - 2023-02-17T00:00:00.000+0000
+          - 2023-12-24T00:00:00.000+0000
+          - 2023-11-27T00:00:00.000+0000
+      - name: SCHEDULE_TIME
+        description: The scheduled time of the ticket, representing the planned or expected time of the event or activity associated with the ticket.
+        expr: SCHEDULE_TIME
+        data_type: TIMESTAMP_NTZ
+        sample_values:
+          - 2023-05-01 09:00
+          - 2023-01-04 09:00
+          - 2023-02-06 09:00
     facts:
-      - name: TICKET_OPEN
-        expr: TICKET_OPEN
-        data_type: NUMBER(38,0)
-      - name: TICKET_CLOSED
-        expr: TICKET_CLOSED
-        data_type: NUMBER(38,0)
       - name: ACTIVE_TICKET
+        description: Indicates whether a ticket is currently active (1), has been resolved (2), or has not been started (0).
         expr: ACTIVE_TICKET
         data_type: NUMBER(38,0)
-      - name: TICKET_HOLDING_TIME_HR
-        expr: TICKET_HOLDING_TIME_HR
-        data_type: FLOAT
-      - name: TOTAL_DOWNTIME_DURATION_HR
-        expr: TOTAL_DOWNTIME_DURATION_HR
-        data_type: FLOAT
-      - name: ISSUE_BAD_CONNECTION
-        expr: ISSUE_BAD_CONNECTION
-        data_type: NUMBER(38,0)
-      - name: ISSUE_LINK_LOSS
-        expr: ISSUE_LINK_LOSS
-        data_type: NUMBER(38,0)
-      - name: ISSUE_HIGH_TEMP
-        expr: ISSUE_HIGH_TEMP
-        data_type: NUMBER(38,0)
-      - name: ISSUE_DYING_GASP
-        expr: ISSUE_DYING_GASP
-        data_type: NUMBER(38,0)
-      - name: URGENCY_VISIT_COUNT
-        expr: URGENCY_VISIT_COUNT
-        data_type: NUMBER(38,0)
-      - name: SCHEDULE_VISIT
-        expr: SCHEDULE_VISIT
-        data_type: NUMBER(38,0)
-      - name: DURATION_HOURS
-        expr: DURATION_HOURS
-        data_type: FLOAT
-      - name: NEW_ACTIVATION
-        expr: NEW_ACTIVATION
-        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '0'
       - name: AVG_TICKET_DURATION_HR
+        description: The average time taken to resolve a ticket, measured in hours.
         expr: AVG_TICKET_DURATION_HR
         data_type: FLOAT
-
-
-
+        sample_values:
+          - '1'
+          - '2'
+          - '3'
+      - name: DURATION_HOURS
+        description: The total time spent on a ticket, measured in hours.
+        expr: DURATION_HOURS
+        data_type: FLOAT
+        sample_values:
+          - '1'
+          - '2'
+          - '3'
+      - name: ISSUE_BAD_CONNECTION
+        description: The total number of issues related to bad connections reported in the ticket.
+        expr: ISSUE_BAD_CONNECTION
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '3'
+          - '0'
+      - name: ISSUE_DYING_GASP
+        description: Number of dying gasp issues reported in a ticket.
+        expr: ISSUE_DYING_GASP
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '0'
+      - name: ISSUE_HIGH_TEMP
+        description: Number of high temperature issues reported in a ticket.
+        expr: ISSUE_HIGH_TEMP
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '3'
+          - '0'
+      - name: ISSUE_LINK_LOSS
+        description: The total number of issues related to link loss reported in the ticket.
+        expr: ISSUE_LINK_LOSS
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '2'
+          - '3'
+          - '0'
+      - name: NEW_ACTIVATION
+        description: The total number of new activations for a specific product or service, representing the count of new instances or subscriptions initiated during a particular period.
+        expr: NEW_ACTIVATION
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '21'
+          - '17'
+          - '13'
+      - name: SCHEDULE_VISIT
+        description: Indicates whether a scheduled visit was made as part of the ticket resolution process.
+        expr: SCHEDULE_VISIT
+        data_type: NUMBER(38,0)
+        sample_values:
+          - 'Yes'
+          - 'No'
+      - name: TICKET_CLOSED
+        description: 'Indicates whether a ticket has been closed, with values representing: 0 = Open, 1 = Closed, 2 = Cancelled.'
+        expr: TICKET_CLOSED
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '0'
+      - name: TICKET_HOLDING_TIME_HR
+        description: The total time, in hours, that a ticket was held by a customer or agent before being resolved or closed.
+        expr: TICKET_HOLDING_TIME_HR
+        data_type: FLOAT
+        sample_values:
+          - '33.8'
+          - '38.9'
+          - '4.2'
+      - name: TICKET_OPEN
+        description: The number of tickets that were open at the end of the reporting period.
+        expr: TICKET_OPEN
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '0'
+      - name: TOTAL_DOWNTIME_DURATION_HR
+        description: The total amount of time, in hours, that a ticket was in a downtime status, indicating the duration of time that a service or system was unavailable.
+        expr: TOTAL_DOWNTIME_DURATION_HR
+        data_type: FLOAT
+        sample_values:
+          - '0'
+          - '1.6'
+          - '150.4'
+      - name: URGENCY_VISIT_COUNT
+        description: The total number of visits made to a ticket that were marked as urgent.
+        expr: URGENCY_VISIT_COUNT
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '0'
 relationships:
-  # Dimensions to dimensions
   - name: DIM_CLUSTER_to_DIM_CITY
     left_table: DIM_CLUSTER
     right_table: DIM_CITY
@@ -661,7 +1510,14 @@ relationships:
         right_column: CITY_KEY
     relationship_type: many_to_one
     join_type: inner
-
+  - name: DIM_CLUSTER_to_NETWORK_CONTEXT
+    left_table: DIM_CLUSTER
+    right_table: FACT_NETWORK_CONTEXT_STATIC
+    relationship_columns:
+      - left_column: CLUSTER_KEY
+        right_column: CLUSTER_KEY
+    relationship_type: one_to_one
+    join_type: inner
   - name: DIM_CLUSTER_to_DIM_OLT
     left_table: DIM_CLUSTER
     right_table: DIM_OLT
@@ -669,8 +1525,7 @@ relationships:
       - left_column: OLT_KEY
         right_column: OLT_KEY
     relationship_type: many_to_one
-    join_type: inner
-
+    join_type: inner    
   - name: DIM_OLT_to_DIM_CITY
     left_table: DIM_OLT
     right_table: DIM_CITY
@@ -679,9 +1534,7 @@ relationships:
         right_column: CITY_KEY
     relationship_type: many_to_one
     join_type: inner
-
-  # Facts to dimensions (preferred via keys)
-  - name: FEEDBACK_to_CITY
+  - name: FEEDBACK_to_DIM_CITY
     left_table: FACT_CUSTOMER_FEEDBACK
     right_table: DIM_CITY
     relationship_columns:
@@ -689,44 +1542,47 @@ relationships:
         right_column: CITY_KEY
     relationship_type: many_to_one
     join_type: inner
-
-  - name: FEEDBACK_to_CLUSTER
+  - name: FEEDBACK_to_NETWORK_CONTEXT
+    left_table: FACT_CUSTOMER_FEEDBACK
+    right_table: FACT_NETWORK_CONTEXT_STATIC
+    relationship_columns:
+      - left_column: CLUSTER_ID
+        right_column: CLUSTER_ID
+    relationship_type: one_to_one
+    join_type: inner    
+  - name: FEEDBACK_to_DIM_CLUSTER
     left_table: FACT_CUSTOMER_FEEDBACK
     right_table: DIM_CLUSTER
     relationship_columns:
-      - left_column: CLUSTER_KEY
-        right_column: CLUSTER_KEY
-    relationship_type: many_to_one
+      - left_column: CLUSTER_ID
+        right_column: CLUSTER_ID
+    relationship_type: one_to_one
     join_type: inner
-
-  - name: FEEDBACK_to_OLT
+  - name: FEEDBACK_to_DIM_OLT
     left_table: FACT_CUSTOMER_FEEDBACK
     right_table: DIM_OLT
     relationship_columns:
       - left_column: OLT_ID
         right_column: OLT_ID
     relationship_type: many_to_one
-    join_type: inner
-
-  - name: EVENT_TRANSCRIPTS_to_OLT
+    join_type: inner    
+  - name: EVENT_TRANSCRIPTS_to_DIM_OLT
     left_table: FACT_EVENT_TRANSCRIPTS
     right_table: DIM_OLT
     relationship_columns:
       - left_column: OLT_ID
         right_column: OLT_ID
     relationship_type: many_to_one
-    join_type: inner
-
-  - name: INCIDENT_TREND_to_CITY
+    join_type: inner    
+  - name: INCIDENT_TREND_to_DIM_CITY
     left_table: FACT_INCIDENT_TREND_SUMMARY
     right_table: DIM_CITY
     relationship_columns:
       - left_column: CITY_KEY
         right_column: CITY_KEY
     relationship_type: many_to_one
-    join_type: inner
-
-  - name: ML_FEATURES_to_CITY
+    join_type: inner    
+  - name: ML_FEATURES_to_DIM_CITY
     left_table: FACT_ML_FEATURES
     right_table: DIM_CITY
     relationship_columns:
@@ -734,8 +1590,23 @@ relationships:
         right_column: CITY_KEY
     relationship_type: many_to_one
     join_type: inner
-
-  - name: ML_FEATURES_to_CLUSTER
+  - name: ML_FEATURES_to_NETWORK_CONTEXT
+    left_table: FACT_ML_FEATURES
+    right_table: FACT_NETWORK_CONTEXT_STATIC
+    relationship_columns:
+      - left_column: CLUSTER_KEY
+        right_column: CLUSTER_KEY
+    relationship_type: many_to_one
+    join_type: inner    
+  - name: ML_FEATURES_to_FEEDBACK
+    left_table: FACT_ML_FEATURES
+    right_table: FACT_CUSTOMER_FEEDBACK
+    relationship_columns:
+      - left_column: CLUSTER_KEY
+        right_column: CLUSTER_KEY
+    relationship_type: many_to_one
+    join_type: inner    
+  - name: ML_FEATURES_to_DIM_CLUSTER
     left_table: FACT_ML_FEATURES
     right_table: DIM_CLUSTER
     relationship_columns:
@@ -743,8 +1614,7 @@ relationships:
         right_column: CLUSTER_KEY
     relationship_type: many_to_one
     join_type: inner
-
-  - name: ML_FEATURES_to_OLT
+  - name: ML_FEATURES_to_DIM_OLT
     left_table: FACT_ML_FEATURES
     right_table: DIM_OLT
     relationship_columns:
@@ -752,8 +1622,7 @@ relationships:
         right_column: OLT_ID
     relationship_type: many_to_one
     join_type: inner
-
-  - name: NETWORK_CONTEXT_to_CITY
+  - name: NETWORK_CONTEXT_to_DIM_CITY
     left_table: FACT_NETWORK_CONTEXT_STATIC
     right_table: DIM_CITY
     relationship_columns:
@@ -761,8 +1630,7 @@ relationships:
         right_column: CITY_KEY
     relationship_type: many_to_one
     join_type: inner
-
-  - name: NETWORK_CONTEXT_to_OLT
+  - name: NETWORK_CONTEXT_to_DIM_OLT
     left_table: FACT_NETWORK_CONTEXT_STATIC
     right_table: DIM_OLT
     relationship_columns:
@@ -770,7 +1638,6 @@ relationships:
         right_column: OLT_ID
     relationship_type: many_to_one
     join_type: inner
-
   - name: ONT_STATUS_to_CITY
     left_table: FACT_ONT_STATUS
     right_table: DIM_CITY
@@ -779,8 +1646,23 @@ relationships:
         right_column: CITY_KEY
     relationship_type: many_to_one
     join_type: inner
-
-  - name: ONT_STATUS_to_CLUSTER
+  - name: ONT_STATUS_to_NETWORK_CONTEXT
+    left_table: FACT_ONT_STATUS
+    right_table: FACT_NETWORK_CONTEXT_STATIC
+    relationship_columns:
+      - left_column: CLUSTER_KEY
+        right_column: CLUSTER_KEY
+    relationship_type: many_to_one
+    join_type: inner
+  - name: ONT_STATUS_to_FEEDBACK
+    left_table: FACT_ONT_STATUS
+    right_table: FACT_CUSTOMER_FEEDBACK
+    relationship_columns:
+      - left_column: CLUSTER_KEY
+        right_column: CLUSTER_KEY
+    relationship_type: many_to_one
+    join_type: inner    
+  - name: ONT_STATUS_to_DIM_CLUSTER
     left_table: FACT_ONT_STATUS
     right_table: DIM_CLUSTER
     relationship_columns:
@@ -788,8 +1670,7 @@ relationships:
         right_column: CLUSTER_KEY
     relationship_type: many_to_one
     join_type: inner
-
-  - name: ONT_STATUS_to_OLT
+  - name: ONT_STATUS_to_DIM_OLT
     left_table: FACT_ONT_STATUS
     right_table: DIM_OLT
     relationship_columns:
@@ -797,8 +1678,7 @@ relationships:
         right_column: OLT_ID
     relationship_type: many_to_one
     join_type: inner
-
-  - name: TICKET_to_CITY
+  - name: TICKET_to_DIM_CITY
     left_table: FACT_TICKET_SUMMARY
     right_table: DIM_CITY
     relationship_columns:
@@ -806,8 +1686,7 @@ relationships:
         right_column: CITY_KEY
     relationship_type: many_to_one
     join_type: inner
-
-  - name: TICKET_to_FEEDBACK_by_customer
+  - name: TICKET_to_FEEDBACK
     left_table: FACT_TICKET_SUMMARY
     right_table: FACT_CUSTOMER_FEEDBACK
     relationship_columns:
@@ -815,11 +1694,9 @@ relationships:
         right_column: CUSTOMER_ID
     relationship_type: many_to_one
     join_type: inner
-
-  # Cross-fact alignment (composite on time + key)
-  - name: ONT_STATUS_to_ML_FEATURES_time_key
-    left_table: FACT_ONT_STATUS
-    right_table: FACT_ML_FEATURES
+  - name: ML_FEATURES_to_EVENT_TRANSCRIPTS_unique_key
+    left_table: FACT_ML_FEATURES
+    right_table: FACT_EVENT_TRANSCRIPTS
     relationship_columns:
       - left_column: TIMESTAMP_1H
         right_column: TIMESTAMP_1H
@@ -829,85 +1706,195 @@ relationships:
         right_column: CLUSTER_ID
     relationship_type: many_to_one
     join_type: inner
-
-  - name: EVENT_TRANSCRIPTS_to_ONT_STATUS_time
-    left_table: FACT_EVENT_TRANSCRIPTS
-    right_table: FACT_ONT_STATUS
-    relationship_columns:
-      - left_column: TIMESTAMP_1H
-        right_column: TIMESTAMP_1H
-      - left_column: OLT_ID
-        right_column: OLT_ID
-    relationship_type: many_to_one
-    join_type: inner
-
 verified_queries:
-  - name: hourly_outage_hotspots
-    question: |+
-      Show the top 10 clusters by current outage ratio in the last 24 hours, including city and OLT, sorted by OFFLINE_ONT_RATIO.
+  - name: provinces_high_share_predicted_outages_2023_2024
+    question: |
+      Across 2023–2024, which provinces had the highest share of predicted next-hour outages (label_outage_1h = 1)?
     use_as_onboarding_question: false
     sql: |-
-      WITH recent AS (
+      WITH period AS (
         SELECT
-          s.TIMESTAMP_1H,
-          s.CLUSTER_ID,
-          s.CLUSTER_KEY,
-          s.CLUSTER_NAME,
-          s.OLT_ID,
-          s.CITY_KEY,
-          s.OFFLINE_ONT_RATIO
-        FROM HACKATHON.DATAMART.FACT_ONT_STATUS s
-        WHERE s.TIMESTAMP_1H >= DATEADD('hour', -24, CURRENT_TIMESTAMP())
+          TIMESTAMP_1H
+        FROM HACKATHON.DATAMART.FACT_ML_FEATURES
+        WHERE TIMESTAMP_1H BETWEEN '2023-01-01' AND '2024-12-31'
+        LIMIT 1
       )
       SELECT
-        c.CITY,
-        dcl.CLUSTER_NAME,
-        r.OLT_ID,
-        AVG(r.OFFLINE_ONT_RATIO) AS avg_offline_ratio
-      FROM recent r
-      JOIN HACKATHON.DATAMART.DIM_CITY c    ON r.CITY_KEY   = c.CITY_KEY
-      JOIN HACKATHON.DATAMART.DIM_CLUSTER dcl ON r.CLUSTER_KEY = dcl.CLUSTER_KEY
-      GROUP BY c.CITY, dcl.CLUSTER_NAME, r.OLT_ID
+        COALESCE(PROVINCE,'UNKNOWN') AS province,
+        COUNT(*) AS total_records,
+        SUM(CASE WHEN LABEL_OUTAGE_1H = 1 THEN 1 ELSE 0 END) AS outages_count,
+        CASE WHEN COUNT(*) = 0 THEN 0
+             ELSE SUM(CASE WHEN LABEL_OUTAGE_1H = 1 THEN 1.0 ELSE 0 END) / COUNT(*)
+        END AS outage_share
+      FROM HACKATHON.DATAMART.FACT_ML_FEATURES
+      WHERE TIMESTAMP_1H BETWEEN '2023-01-01' AND '2024-12-31'
+      GROUP BY COALESCE(PROVINCE,'UNKNOWN')
+      ORDER BY outage_share DESC
+      LIMIT 20
+    verified_by: User
+    verified_at: 1759161600
+  - name: network_conditions_associated_with_outages_2023
+    question: |
+      During 2023, which network conditions were most strongly associated with predicted next-hour outages (label_outage_1h = 1)?
+    use_as_onboarding_question: false
+    sql: |-
+      WITH base AS (
+        SELECT
+          LABEL_OUTAGE_1H,
+          RX_POWER_AVG,
+          SNR_AVG,
+          TEMPERATURE_AVG_C,
+          LINK_LOSS_COUNT,
+          HIGH_TEMP_COUNT,
+          DYING_GASP_COUNT,
+          OFFLINE_ONT_NOW,
+          FAULT_RATE
+        FROM HACKATHON.DATAMART.FACT_ML_FEATURES
+        WHERE TIMESTAMP_1H BETWEEN '2023-01-01' AND '2023-12-31'
+      )
+      SELECT 'RX_POWER_AVG' AS metric,
+             AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN RX_POWER_AVG END) AS avg_when_outage,
+             AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN RX_POWER_AVG END) AS avg_when_no_outage,
+             (AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN RX_POWER_AVG END) - AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN RX_POWER_AVG END)) AS diff
+      FROM base
+      UNION ALL
+      SELECT 'SNR_AVG', AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN SNR_AVG END), AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN SNR_AVG END),
+             (AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN SNR_AVG END) - AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN SNR_AVG END))
+      FROM base
+      UNION ALL
+      SELECT 'TEMPERATURE_AVG_C', AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN TEMPERATURE_AVG_C END), AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN TEMPERATURE_AVG_C END),
+             (AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN TEMPERATURE_AVG_C END) - AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN TEMPERATURE_AVG_C END))
+      FROM base
+      UNION ALL
+      SELECT 'LINK_LOSS_COUNT', AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN LINK_LOSS_COUNT END), AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN LINK_LOSS_COUNT END),
+             (AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN LINK_LOSS_COUNT END) - AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN LINK_LOSS_COUNT END))
+      FROM base
+      UNION ALL
+      SELECT 'HIGH_TEMP_COUNT', AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN HIGH_TEMP_COUNT END), AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN HIGH_TEMP_COUNT END),
+             (AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN HIGH_TEMP_COUNT END) - AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN HIGH_TEMP_COUNT END))
+      FROM base
+      UNION ALL
+      SELECT 'DYING_GASP_COUNT', AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN DYING_GASP_COUNT END), AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN DYING_GASP_COUNT END),
+             (AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN DYING_GASP_COUNT END) - AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN DYING_GASP_COUNT END))
+      FROM base
+      UNION ALL
+      SELECT 'OFFLINE_ONT_NOW', AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN OFFLINE_ONT_NOW END), AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN OFFLINE_ONT_NOW END),
+             (AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN OFFLINE_ONT_NOW END) - AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN OFFLINE_ONT_NOW END))
+      FROM base
+      UNION ALL
+      SELECT 'FAULT_RATE', AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN FAULT_RATE END), AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN FAULT_RATE END),
+             (AVG(CASE WHEN LABEL_OUTAGE_1H = 1 THEN FAULT_RATE END) - AVG(CASE WHEN LABEL_OUTAGE_1H = 0 THEN FAULT_RATE END))
+      FROM base
+      ORDER BY ABS(diff) DESC
+      LIMIT 20
+    verified_by: User
+    verified_at: 1759161600
+  - name: vendor_avg_fault_rate_dynamic
+    question: |
+      Which vendors show the highest average network fault rate?
+    use_as_onboarding_question: false
+    sql: |-
+      SELECT
+        COALESCE(nc.VENDOR, 'UNKNOWN') AS vendor,
+        AVG(os.FAULT_RATE) AS avg_fault_rate,
+        COUNT(*) AS record_count
+      FROM HACKATHON.DATAMART.FACT_ONT_STATUS AS os
+      INNER JOIN HACKATHON.DATAMART.FACT_NETWORK_CONTEXT_STATIC AS nc
+        ON os.OLT_ID = nc.OLT_ID
+      WHERE os.TIMESTAMP_1H BETWEEN
+        (SELECT MIN(TIMESTAMP_1H) FROM HACKATHON.DATAMART.FACT_ONT_STATUS)
+        AND (SELECT MAX(TIMESTAMP_1H) FROM HACKATHON.DATAMART.FACT_ONT_STATUS)
+      GROUP BY COALESCE(nc.VENDOR, 'UNKNOWN')
+      ORDER BY avg_fault_rate DESC
+      LIMIT 10;
+    verified_by: User
+    verified_at: 1759161600
+  - name: cities_high_offline_ratio_recent
+    question: |
+      Which cities have the highest average OFFLINE_ONT_RATIO?
+    use_as_onboarding_question: false
+    sql: |-
+      SELECT
+        CITY,
+        AVG(OFFLINE_ONT_RATIO) AS avg_offline_ratio
+      FROM HACKATHON.DATAMART.FACT_ONT_STATUS
+      WHERE TIMESTAMP_1H BETWEEN
+        (SELECT MIN(TIMESTAMP_1H) FROM HACKATHON.DATAMART.FACT_ONT_STATUS)
+        AND (SELECT MAX(TIMESTAMP_1H) FROM HACKATHON.DATAMART.FACT_ONT_STATUS)
+      GROUP BY CITY
       ORDER BY avg_offline_ratio DESC
-      LIMIT 10
+      LIMIT 10;
     verified_by: User
     verified_at: 1759161600
-
-  - name: tickets_vs_incidents_daily
-    question: |+
-      Compare daily ticket counts with daily fault rate for each city in September 2024.
+  - name: top_clusters_by_offline_dynamic
+    question: |
+      Which clusters have the most offline ONTs?
     use_as_onboarding_question: false
     sql: |-
       SELECT
-        t.DATE,
-        dc.CITY,
-        SUM(t.TICKET_OPEN) AS tickets_opened,
-        SUM(t.TICKET_CLOSED) AS tickets_closed,
-        AVG(i.FAULT_RATE_DAILY) AS avg_fault_rate
-      FROM HACKATHON.DATAMART.FACT_TICKET_SUMMARY t
-      JOIN HACKATHON.DATAMART.DIM_CITY dc ON t.CITY_KEY = dc.CITY_KEY
-      LEFT JOIN HACKATHON.DATAMART.FACT_INCIDENT_TREND_SUMMARY i
-            ON i.CITY_KEY = t.CITY_KEY AND i.DATE = t.DATE
-      WHERE t.DATE >= '2024-09-01' AND t.DATE < '2024-10-01'
-      GROUP BY t.DATE, dc.CITY
-      ORDER BY t.DATE, dc.CITY
+        CLUSTER_ID,
+        SUM(OFFLINE_ONT_NOW) AS total_offline_onts
+      FROM HACKATHON.DATAMART.FACT_ML_FEATURES
+      WHERE TIMESTAMP_1H BETWEEN
+        (SELECT MIN(TIMESTAMP_1H) FROM HACKATHON.DATAMART.FACT_ML_FEATURES)
+        AND (SELECT MAX(TIMESTAMP_1H) FROM HACKATHON.DATAMART.FACT_ML_FEATURES)
+      GROUP BY CLUSTER_ID
+      ORDER BY total_offline_onts DESC
+      LIMIT 10;
     verified_by: User
     verified_at: 1759161600
-
-  - name: feedback_sentiment_by_cluster
-    question: |+
-      What is the average customer rating and sentiment label distribution by cluster this month?
+  - name: olts_with_most_link_loss_dynamic
+    question: |
+      Which OLTs generated the most link-loss events?
     use_as_onboarding_question: false
     sql: |-
       SELECT
-        dcl.CLUSTER_NAME,
-        AVG(f.RATING_1_5) AS avg_rating,
-        f.SENTIMENT_LABEL,
-        COUNT(*) AS cnt
-      FROM HACKATHON.DATAMART.FACT_CUSTOMER_FEEDBACK f
-      JOIN HACKATHON.DATAMART.DIM_CLUSTER dcl ON f.CLUSTER_KEY = dcl.CLUSTER_KEY
-      WHERE DATE_TRUNC('month', CURRENT_DATE()) = DATE_TRUNC('month', f.ACTIVE_DATE)
-      GROUP BY dcl.CLUSTER_NAME, f.SENTIMENT_LABEL
-      ORDER BY dcl.CLUSTER_NAME, cnt DESC
+        OLT_ID,
+        SUM(LINK_LOSS_COUNT) AS total_link_loss
+      FROM
+        HACKATHON.DATAMART.FACT_ONT_STATUS
+      WHERE TIMESTAMP_1H BETWEEN
+        (SELECT MIN(TIMESTAMP_1H) FROM HACKATHON.DATAMART.FACT_ONT_STATUS)
+        AND (SELECT MAX(TIMESTAMP_1H) FROM HACKATHON.DATAMART.FACT_ONT_STATUS)
+      GROUP BY OLT_ID
+      ORDER BY total_link_loss DESC
+      LIMIT 20;
+    verified_by: User
+    verified_at: 1759161600
+  - name: region_avg_rating_dynamic
+    question: |
+      How do customer ratings vary by region?
+    use_as_onboarding_question: false
+    sql: |-
+      SELECT
+        COALESCE(REGION,'UNKNOWN') AS region,
+        AVG(RATING_1_5) AS avg_rating,
+        COUNT(*) AS feedback_count
+      FROM HACKATHON.DATAMART.FACT_CUSTOMER_FEEDBACK
+      WHERE ACTIVE_DATE BETWEEN
+        (SELECT MIN(ACTIVE_DATE) FROM HACKATHON.DATAMART.FACT_CUSTOMER_FEEDBACK)
+        AND (SELECT MAX(ACTIVE_DATE) FROM HACKATHON.DATAMART.FACT_CUSTOMER_FEEDBACK)
+      GROUP BY COALESCE(REGION,'UNKNOWN')
+      ORDER BY avg_rating DESC
+      LIMIT 20;
+    verified_by: User
+    verified_at: 1759161600
+  - name: cities_tickets_with_long_hold_dynamic
+    question: |
+      Which cities have the most tickets with holding time > 24 hours?
+    use_as_onboarding_question: false
+    sql: |-
+      SELECT
+        CITY,
+        COUNT(*) AS tickets_over_24h
+      FROM HACKATHON.DATAMART.FACT_TICKET_SUMMARY
+      WHERE (
+        DATE BETWEEN (SELECT MIN(DATE) FROM HACKATHON.DATAMART.FACT_TICKET_SUMMARY)
+        AND (SELECT MAX(DATE) FROM HACKATHON.DATAMART.FACT_TICKET_SUMMARY)
+      )
+      AND TICKET_HOLDING_TIME_HR > 24
+      GROUP BY CITY
+      ORDER BY tickets_over_24h DESC
+      LIMIT 20;
     verified_by: User
     verified_at: 1759161600
