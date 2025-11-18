@@ -669,6 +669,8 @@ You can access and download all sample datasets from the following link:
 
 ![Snowflake Intelligence Custom Tools Send Email](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/snowflake_intelligence_send_email.png)
 
+![Snowflake Intelligence Result in Email](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/insight_and_recommendation_result_in_email.png)
+
 ![Dashboard Tableau 1](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/tableau-ont-summary.png)
 
 ![Dashboard Tableau 2](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/tableau-ont%20-detail.png)
