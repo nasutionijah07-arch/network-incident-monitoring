@@ -623,6 +623,23 @@ The platform provides **multi-layered visualization** for different user persona
 
 ### **Synthetic Dataset**
 
+**Dataset Source**: This project utilizes a **custom-generated synthetic dataset** specifically designed to simulate realistic network incident patterns and device behaviors. The synthetic data generation approach provides several key advantages:
+
+**Benefits of Synthetic Data**:
+- **Privacy-First**: No exposure of sensitive customer information or actual network infrastructure details
+- **Controlled Scenarios**: Ability to generate specific edge cases and rare incident patterns that may not exist in historical data
+- **Scalability**: Generate unlimited data volumes for comprehensive model training and testing
+- **Realistic Patterns**: Statistically representative of real-world network behaviors, including seasonal variations, peak usage patterns, and incident correlations
+- **Reproducibility**: Consistent data generation enables reliable model benchmarking and performance evaluation
+- **Flexibility**: Easy to modify data characteristics for testing different network configurations and scenarios
+
+**Time Period**: The dataset spans **2 years** of continuous network operations:
+- **Start Date**: January 1, 2023 (`2023-01-01`)
+- **End Date**: December 31, 2024 (`2024-12-31`)
+- **Coverage**: 730 days of hourly network device data, incidents, customer feedback, and trouble tickets
+
+**Dataset Generation**: The synthetic data was generated using specialized notebooks (`generate_synthetic_dataset_1.ipynb`, `generate_synthetic_dataset_2.ipynb`, `generate_synthetic_dataset_3.ipynb`) that model realistic network behaviors including signal degradation patterns, regional incident correlations, vendor-specific failure rates, and temporal trends.
+
 Due to large file sizes, the **full synthetic dataset** is hosted externally.
 You can access and download all sample datasets from the following link:
 
