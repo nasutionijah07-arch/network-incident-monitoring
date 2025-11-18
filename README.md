@@ -649,9 +649,9 @@ You can access and download all sample datasets from the following link:
 
 ### **Result**
 
-! [Medallion Architecture](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/bronze%2C%20silver%2C%20gold.png)
+![Medallion Architecture](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/bronze%2C%20silver%2C%20gold.png)
 
-! [Trained Machine Learning Model on Snowflake Notebook](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/notebooks_snowflake.png)
+![Trained Machine Learning Model on Snowflake Notebook](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/notebooks_snowflake.png)
 
 ![Confusion Matrix](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/confusion-matrix.png)
 
