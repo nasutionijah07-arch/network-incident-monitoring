@@ -655,6 +655,14 @@ You can access and download all sample datasets from the following link:
 
 ![Confusion Matrix](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/confusion-matrix.png)
 
+![Dashboard Tableau 1](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/tableau-ont-summary.png)
+
+![Dashboard Tableau 2](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/tableau-ont%20-detail.png)
+
+![Dashboard Tableau 3](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/tableau-trouble-ticket-summary.png)
+
+![Dashboard Tableau 4](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/tableau-trouble-ticket-detail.png)
+
 ![Streamlit Single Prediction](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/streamlit_single_pred.png)
 
 ![Streamlit Batch Prediction](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/streamlit_batch_pred.png)
@@ -670,14 +678,6 @@ You can access and download all sample datasets from the following link:
 ![Snowflake Intelligence Custom Tools Send Email](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/snowflake_intelligence_send_email.png)
 
 ![Snowflake Intelligence Result in Email](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/insight_and_recommendation_result_in_email.png)
-
-![Dashboard Tableau 1](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/tableau-ont-summary.png)
-
-![Dashboard Tableau 2](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/tableau-ont%20-detail.png)
-
-![Dashboard Tableau 3](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/tableau-trouble-ticket-summary.png)
-
-![Dashboard Tableau 4](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/tableau-trouble-ticket-detail.png)
 
 ---
 
