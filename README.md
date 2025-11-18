@@ -649,7 +649,25 @@ You can access and download all sample datasets from the following link:
 
 ### **Result**
 
+! [Medallion Architecture](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/bronze%2C%20silver%2C%20gold.png)
+
+! [Trained Machine Learning Model on Snowflake Notebook](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/notebooks_snowflake.png)
+
 ![Confusion Matrix](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/confusion-matrix.png)
+
+![Streamlit Single Prediction](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/streamlit_single_pred.png)
+
+![Streamlit Batch Prediction](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/streamlit_batch_pred.png)
+
+![Streamlit Prediction Dashboard](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/streamlit_pred_dashboard.png)
+
+![Streamlit Live Prediction](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/streamlit_live_pred.png)
+
+![Snowflake Intelligence Cortex Analyst](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/snowflake_intelligence_cortex_analyst.png)
+
+![Snowflake Intelligence Cortex Search](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/snowflake_intelligence_cortex_search.png)
+
+![Snowflake Intelligence Custom Tools Send Email](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/snowflake_intelligence_send_email.png)
 
 ![Dashboard Tableau 1](https://raw.githubusercontent.com/nasutionijah07-arch/network-incident-monitoring/refs/heads/main/assets/img/tableau-ont-summary.png)
 
